@@ -8,7 +8,7 @@ initialize();
 function initialize() {
   console.log("Welcome To the Employee Tracker!");
   startMenu();
-}
+};
 
 function startMenu() {
   inquirer
@@ -21,10 +21,13 @@ function startMenu() {
           "View All Employees",
           "View All Departments",
           "View Roles",
+          "View Employee By Manager",
+          "View Employee By Department",
           "Add A New Employee",
           "Add A New Department",
           "Add A New Role",
           "Update An Employee's Role",
+          "View Department Budgets"
         ],
       },
     ])
@@ -42,6 +45,14 @@ function startMenu() {
           viewAllRoles();
           break;
 
+        case "View Employee By Manager":
+          viewByManager();
+          break;
+        
+        case "View Employee By Department":
+          viewByDepartment();
+          break;
+
         case "Add A New Employee":
           addEmployee();
           break;
@@ -57,9 +68,13 @@ function startMenu() {
         case "Update An Employee's Role":
           updateEmployeeRole();
           break;
-      }
+        
+        case "View Department Budgets":
+          viewBudget();
+          break;
+      };
     });
-}
+};
 
 //--To View All Employees--
 function viewAllEmployees() {
@@ -72,7 +87,7 @@ function viewAllEmployees() {
     .then(() => {
       startMenu();
     });
-}
+};
 
 //--To View All Departments--
 function viewAllDepartments() {
@@ -85,7 +100,7 @@ function viewAllDepartments() {
     .then(() => {
       startMenu();
     });
-}
+};
 
 //--To View All Roles--
 function viewAllRoles() {
@@ -98,7 +113,33 @@ function viewAllRoles() {
     .then(() => {
       startMenu();
     });
-}
+};
+
+//--Viewing By Manager--
+function viewByManager() {
+  db.findEmployeeByMngr()
+  .then(([rows]) => {
+    let employees = rows;
+    console.log("\n");
+    consoleTable(employees);
+  })
+  .then(() => {
+    startMenu();
+  });
+};
+
+//--Viewing By Department--
+function viewByDepartment() {
+  db.findEmployeeByDept()
+  .then(([rows]) => {
+    let employees = rows;
+    console.log("\n");
+    consoleTable(employees);
+  })
+  .then(() => {
+    startMenu();
+  });
+};
 
 //--Adding New Employee--
 function addEmployee() {
@@ -134,7 +175,7 @@ function addEmployee() {
         `${answer.first_name} ${answer.last_name} was added to the database.`
       );
     });
-}
+};
 
 //--Adding New Department--
 function addDepartment() {
@@ -158,7 +199,7 @@ function addDepartment() {
           startMenu();
         });
     });
-}
+};
 
 //--Adding New Role--
 function addRole() {
@@ -189,7 +230,7 @@ function addRole() {
         `A new role called: ${answer.role_title}, has been added to the database.`
       );
     });
-}
+};
 
 //--Updating Employee Role--
 function updateEmployeeRole() {
@@ -233,3 +274,17 @@ function updateEmployeeRole() {
       });
   });
 };
+
+//--Viewing Budget By Department--
+function viewBudget() {
+  console.log('Showing Budget By Department...');
+  db.viewDeptBudget()
+  .then(([rows]) => {
+    let departments = rows;
+    console.log("\n");
+    consoleTable(departments);
+  })
+  .then(() => {
+    startMenu();
+  });
+}
