@@ -1,6 +1,6 @@
 //--Dependencies--
 const inquirer = require("inquirer");
-const consoleTable = require("console.table");
+require("console.table");
 const db = require("./db");
 
 //--Start Menu--
@@ -53,7 +53,7 @@ function viewBudget() {
     .then(([rows]) => {
       let departments = rows;
       console.log("\n");
-      consoleTable(departments);
+      console.table(departments);
     })
     .then(() => {
       startMenu();
@@ -108,7 +108,7 @@ function viewAllEmployees() {
     .then(([rows]) => {
       let employees = rows;
       console.log("\n");
-      consoleTable(employees);
+      console.table(employees);
     })
     .then(() => {
       startMenu();
@@ -121,7 +121,7 @@ function viewAllDepartments() {
     .then(([rows]) => {
       let departments = rows;
       console.log("\n");
-      consoleTable(departments);
+      console.table(departments);
     })
     .then(() => {
       startMenu();
@@ -134,7 +134,7 @@ function viewAllRoles() {
     .then(([rows]) => {
       let roles = rows;
       console.log("\n");
-      consoleTable(roles);
+      console.table(roles);
     })
     .then(() => {
       startMenu();
@@ -147,7 +147,7 @@ function viewByManager() {
     .then(([rows]) => {
       let employees = rows;
       console.log("\n");
-      consoleTable(employees);
+      console.table(employees);
     })
     .then(() => {
       startMenu();
@@ -160,7 +160,7 @@ function viewByDepartment() {
     .then(([rows]) => {
       let employees = rows;
       console.log("\n");
-      consoleTable(employees);
+      console.table(employees);
     })
     .then(() => {
       startMenu();
@@ -261,7 +261,7 @@ function addDepartment() {
           let departments = rows;
           console.log("\n");
           console.log(`${answer.dept_name} was added to the database.`);
-          consoleTable(departments);
+          console.table(departments);
         })
         .then(() => {
           startMenu();
