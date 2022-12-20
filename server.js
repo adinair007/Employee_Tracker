@@ -8,9 +8,60 @@ initialize();
 function initialize() {
   console.log("Welcome To the Employee Tracker!");
   startMenu();
-};
+}
 
 function startMenu() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "main",
+        message: "Select an option below: ",
+        choices: [
+          "View Contents",
+          "Add To / Update Database",
+          "Delete From Database",
+          "View Department Budgets",
+        ],
+      },
+    ])
+    .then((response) => {
+      switch (response.main) {
+        case "View Contents":
+          viewMenu();
+          break;
+
+        case "Add To / Update Database":
+          addMenu();
+          break;
+
+        case "Delete From Database":
+          deleteMenu();
+          break;
+
+        case "View Department Budgets":
+          viewBudget();
+          break;
+      }
+    });
+}
+
+//--Viewing Budget By Department--
+function viewBudget() {
+  console.log("Showing Budget By Department...");
+  db.viewDeptBudget()
+    .then(([rows]) => {
+      let departments = rows;
+      console.log("\n");
+      consoleTable(departments);
+    })
+    .then(() => {
+      startMenu();
+    });
+}
+
+//--Viewing Menu---
+function viewMenu() {
   inquirer
     .prompt([
       {
@@ -23,11 +74,6 @@ function startMenu() {
           "View Roles",
           "View Employee By Manager",
           "View Employee By Department",
-          "Add A New Employee",
-          "Add A New Department",
-          "Add A New Role",
-          "Update An Employee's Role",
-          "View Department Budgets"
         ],
       },
     ])
@@ -48,11 +94,97 @@ function startMenu() {
         case "View Employee By Manager":
           viewByManager();
           break;
-        
+
         case "View Employee By Department":
           viewByDepartment();
           break;
+      }
+    });
+}
 
+//--To View All Employees--
+function viewAllEmployees() {
+  db.findAllEmployees()
+    .then(([rows]) => {
+      let employees = rows;
+      console.log("\n");
+      consoleTable(employees);
+    })
+    .then(() => {
+      startMenu();
+    });
+}
+
+//--To View All Departments--
+function viewAllDepartments() {
+  db.findAllDepartments()
+    .then(([rows]) => {
+      let departments = rows;
+      console.log("\n");
+      consoleTable(departments);
+    })
+    .then(() => {
+      startMenu();
+    });
+}
+
+//--To View All Roles--
+function viewAllRoles() {
+  db.findAllRoles()
+    .then(([rows]) => {
+      let roles = rows;
+      console.log("\n");
+      consoleTable(roles);
+    })
+    .then(() => {
+      startMenu();
+    });
+}
+
+//--Viewing By Manager--
+function viewByManager() {
+  db.findEmployeeByMngr()
+    .then(([rows]) => {
+      let employees = rows;
+      console.log("\n");
+      consoleTable(employees);
+    })
+    .then(() => {
+      startMenu();
+    });
+}
+
+//--Viewing By Department--
+function viewByDepartment() {
+  db.findEmployeeByDept()
+    .then(([rows]) => {
+      let employees = rows;
+      console.log("\n");
+      consoleTable(employees);
+    })
+    .then(() => {
+      startMenu();
+    });
+}
+
+//--Adding/Updating Menu--
+function addMenu() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "main",
+        message: "Select an option below: ",
+        choices: [
+          "Add A New Employee",
+          "Add A New Department",
+          "Add A New Role",
+          "Update An Employee's Role",
+        ],
+      },
+    ])
+    .then((response) => {
+      switch (response.main) {
         case "Add A New Employee":
           addEmployee();
           break;
@@ -68,78 +200,9 @@ function startMenu() {
         case "Update An Employee's Role":
           updateEmployeeRole();
           break;
-        
-        case "View Department Budgets":
-          viewBudget();
-          break;
-      };
+      }
     });
-};
-
-//--To View All Employees--
-function viewAllEmployees() {
-  db.findAllEmployees()
-    .then(([rows]) => {
-      let employees = rows;
-      console.log("\n");
-      consoleTable(employees);
-    })
-    .then(() => {
-      startMenu();
-    });
-};
-
-//--To View All Departments--
-function viewAllDepartments() {
-  db.findAllDepartments()
-    .then(([rows]) => {
-      let departments = rows;
-      console.log("\n");
-      consoleTable(departments);
-    })
-    .then(() => {
-      startMenu();
-    });
-};
-
-//--To View All Roles--
-function viewAllRoles() {
-  db.findAllRoles()
-    .then(([rows]) => {
-      let roles = rows;
-      console.log("\n");
-      consoleTable(roles);
-    })
-    .then(() => {
-      startMenu();
-    });
-};
-
-//--Viewing By Manager--
-function viewByManager() {
-  db.findEmployeeByMngr()
-  .then(([rows]) => {
-    let employees = rows;
-    console.log("\n");
-    consoleTable(employees);
-  })
-  .then(() => {
-    startMenu();
-  });
-};
-
-//--Viewing By Department--
-function viewByDepartment() {
-  db.findEmployeeByDept()
-  .then(([rows]) => {
-    let employees = rows;
-    console.log("\n");
-    consoleTable(employees);
-  })
-  .then(() => {
-    startMenu();
-  });
-};
+}
 
 //--Adding New Employee--
 function addEmployee() {
@@ -175,7 +238,7 @@ function addEmployee() {
         `${answer.first_name} ${answer.last_name} was added to the database.`
       );
     });
-};
+}
 
 //--Adding New Department--
 function addDepartment() {
@@ -199,7 +262,7 @@ function addDepartment() {
           startMenu();
         });
     });
-};
+}
 
 //--Adding New Role--
 function addRole() {
@@ -230,7 +293,7 @@ function addRole() {
         `A new role called: ${answer.role_title}, has been added to the database.`
       );
     });
-};
+}
 
 //--Updating Employee Role--
 function updateEmployeeRole() {
@@ -273,18 +336,112 @@ function updateEmployeeRole() {
         });
       });
   });
-};
+}
 
-//--Viewing Budget By Department--
-function viewBudget() {
-  console.log('Showing Budget By Department...');
-  db.viewDeptBudget()
-  .then(([rows]) => {
+//--Deletion Menu--
+function deleteMenu() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "main",
+        message: "Select an option below: ",
+        choices: ["Delete An Employee", "Delete A Department", "Delete A Role"],
+      },
+    ])
+    .then((response) => {
+      switch (response.main) {
+        case "Delete An Employee":
+          deleteEmployee();
+          break;
+
+        case "Delete A Department":
+          deleteDept();
+          break;
+
+        case "Delete A Role":
+          deleteRole();
+          break;
+      }
+    });
+}
+
+//--Deleting Employee--
+function deleteEmployee() {
+  db.findAllEmployees().then(([rows]) => {
+    let employees = rows;
+    const employeesList = employees.map(({ id, first_name, last_name }) => ({
+      name: `${first_name} ${last_name}`,
+      value: id,
+    }));
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "employee_delete",
+          message: `Select an employee to delete.`,
+          choices: employeesList,
+        },
+      ])
+      .then((empChoice) => {
+        const employee = empChoice.employee_delete;
+        db.deleteEmp(employee);
+        console.log(
+          `${empChoice.first_name} ${empChoice.last_name} was deleted from the database.`
+        );
+        viewAllEmployees();
+      });
+  });
+}
+
+//--Deleting A Department--
+function deleteDept() {
+  db.findAllDepartments().then(([rows]) => {
     let departments = rows;
-    console.log("\n");
-    consoleTable(departments);
-  })
-  .then(() => {
-    startMenu();
+    const deptList = departments.map(({ name, id }) => ({
+      name: name,
+      value: id,
+    }));
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "dept_delete",
+          message: `Select A Department To Delete:`,
+          choices: deptList,
+        },
+      ])
+      .then((deptChoice) => {
+        const dept = deptChoice.dept_delete;
+        db.deleteDept(dept);
+        console.log(`${deptChoice.name} was deleted from the database.`);
+        viewAllDepartments();
+      });
+  });
+}
+
+//--Deleting A Role--
+function deleteRole() {
+  db.findAllRoles().then(([rows]) => {
+    let roles = rows;
+    const roleList = roles.map(({ title, id }) => ({
+      name: title,
+      value: id,
+    }));
+    inquirer
+      .prommpt([
+        {
+          type: "list",
+          name: "role_delete",
+          message: `Select A Role To Delete:`,
+          choices: roleList,
+        },
+      ])
+      .then((roleChoice) => {
+        const role = roleChoice.role_delete;
+        db.deleteRole(role);
+        console.log(`${roleChoice.title} was deleted from the database.`);
+        viewAllRoles();
+      });
   });
 }

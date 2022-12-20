@@ -71,6 +71,24 @@ class DB {
       .query("UPDATE role SET ? WHERE id = ?;", [role, id]);
   }
 
+  deleteEmp(id) {
+    return this.connection
+      .promise()
+      .query("DELETE FROM employee WHERE id = ?", id);
+  }
+
+  deleteDept(id) {
+    return this.connection
+    .promise()
+    .query("DELETE FROM department WHERE id = ?", id);
+  }
+
+  deleteRole(id) {
+    return this.connection
+    .promise()
+    .query("DELETE FROM role WHERE id = ?", id);
+  }
+
   viewDeptBudget() {
     return this.connection.promise().query(
       `SELECT deparment_id AS id, department.name AS department, SUM(salary) 
