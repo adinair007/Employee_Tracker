@@ -180,6 +180,7 @@ function addMenu() {
           "Add A New Department",
           "Add A New Role",
           "Update An Employee's Role",
+          "Update An Employee's Manager",
         ],
       },
     ])
@@ -199,6 +200,10 @@ function addMenu() {
 
         case "Update An Employee's Role":
           updateEmployeeRole();
+          break;
+
+        case "Update An Employee's Manager":
+          updateManager();
           break;
       }
     });
@@ -331,13 +336,60 @@ function updateEmployeeRole() {
             ])
             .then((res) => db.updateRole(employeeId, res.roleId))
             .then(() => {
-              startMenu();
+              viewAllEmployees();
             });
         });
       });
   });
 }
 
+//--Updating Employee's Manager--
+function updateManager() {
+  db.findAllEmployees().then(([rows]) => {
+    let employees = rows;
+    const employeesList = employees.map(({ id, first_name, last_name }) => ({
+      name: `${first_name} ${last_name}`,
+      value: id,
+    }));
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "employee_update",
+          message: `Select an employee to update.`,
+          choices: employeesList,
+        },
+      ])
+      .then((empChoice) => {
+        const employee = empChoice.employee_update;
+        const params = [];
+        params.push(employee);
+
+        db.findAllEmployees().then(([rows]) => {
+          const managers = rows;
+          const managersList = managers.map(
+            ({ id, first_name, last_name }) => ({
+              name: `${first_name} ${last_name}`,
+              value: id,
+            })
+          );
+          inquirer
+            .prompt([
+              {
+                type: "list",
+                name: "manager",
+                message: `Select A New Manager.`,
+                choices: managersList,
+              },
+            ])
+            .then((res) => db.updateManager(managers, res.manager))
+            .then(() => {
+              viewAllEmployees();
+            });
+        });
+      });
+  });
+}
 //--Deletion Menu--
 function deleteMenu() {
   inquirer
@@ -429,7 +481,7 @@ function deleteRole() {
       value: id,
     }));
     inquirer
-      .prommpt([
+      .prompt([
         {
           type: "list",
           name: "role_delete",

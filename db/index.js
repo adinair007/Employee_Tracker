@@ -42,7 +42,8 @@ class DB {
   findEmployeeByMngr() {
     return this.connection
       .promise()
-      .query("SELECT employee.first_name, employee.last_name");
+      .query(`SELECT employee.first_name, employee.last_name, CONCAT(manager.first_name, ' ', manager.last_name) 
+      AS manager FROM employee JOIN employee manager ON manager.id = employee.manager_id;`);
   }
 
   findEmployeeByDept() {
@@ -69,6 +70,12 @@ class DB {
     return this.connection
       .promise()
       .query("UPDATE role SET ? WHERE id = ?;", [role, id]);
+  }
+
+  updateEmpManager(id, manager_id) {
+    return this.connection
+    .promise()
+    .query("UPDATE employee SET manager_id = ? WHERE id = ?", [manager_id, id]);
   }
 
   deleteEmp(id) {
