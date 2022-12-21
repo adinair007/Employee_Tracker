@@ -236,7 +236,7 @@ function addEmployee() {
     ])
     .then(function (answer) {
       db.createEmployee(answer).then(() => {
-        startMenu();
+        viewAllEmployees();
       });
       console.log("\n");
       console.log(
@@ -264,7 +264,7 @@ function addDepartment() {
           console.table(departments);
         })
         .then(() => {
-          startMenu();
+          viewAllDepartments();
         });
     });
 }
@@ -291,7 +291,7 @@ function addRole() {
     ])
     .then(function (answer) {
       db.createRole(answer).then(() => {
-        startMenu();
+        viewAllRoles();
       });
       console.log("\n");
       console.log(
