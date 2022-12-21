@@ -47,9 +47,8 @@ class DB {
 
   findEmployeeByDept() {
     return this.connection.promise().query(
-      `SELECT employee.first_name, employee.last_name, department.name 
-        AS department FROM employee JOIN ON employee.role_id = role.id JOIN department 
-        ON role.department_id = department.id ORDER BY employee.id;`
+      `SELECT employee.id, employee.first_name, employee.last_name, department.name 
+      AS department, FROM employee department ON role_id = role.department_id `
     );
   }
 
@@ -68,13 +67,13 @@ class DB {
   updateRole(id, role) {
     return this.connection
       .promise()
-      .query("UPDATE role SET ? WHERE id = ?;", [role, id]);
+      .query("UPDATE employee SET role_id = ? WHERE id = ?;", [role, id]);
   }
 
-  updateEmpManager(id, manager_id) {
+  updateManager(id, manager_id) {
     return this.connection
       .promise()
-      .query("UPDATE employee SET manager_id = ? WHERE id = ?", [
+      .query("UPDATE employee SET manager_id = ? WHERE id = ?;", [
         manager_id,
         id,
       ]);

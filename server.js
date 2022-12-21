@@ -251,7 +251,7 @@ function addDepartment() {
     .prompt([
       {
         type: "input",
-        name: "dept_name",
+        name: "name",
         message: `Enter New Department's Name.`,
       },
     ])
@@ -260,7 +260,7 @@ function addDepartment() {
         .then(([rows]) => {
           let departments = rows;
           console.log("\n");
-          console.log(`${answer.dept_name} was added to the database.`);
+          console.log(`${answer.name} was added to the database.`);
           console.table(departments);
         })
         .then(() => {
@@ -275,12 +275,12 @@ function addRole() {
     .prompt([
       {
         type: "input",
-        name: "role_title",
+        name: "title",
         message: `Enter New Role's Title.`,
       },
       {
         type: "input",
-        name: "role_salary",
+        name: "salary",
         message: `Enter Salary Amount.`,
       },
       {
@@ -295,7 +295,7 @@ function addRole() {
       });
       console.log("\n");
       console.log(
-        `A new role called: ${answer.role_title}, has been added to the database.`
+        `A new role called: ${answer.title}, has been added to the database.`
       );
     });
 }
@@ -312,7 +312,7 @@ function updateEmployeeRole() {
       .prompt([
         {
           type: "list",
-          name: "employee_update",
+          name: "employeeId",
           message: `Select an employee to update.`,
           choices: employeesList,
         },
@@ -362,8 +362,6 @@ function updateManager() {
       ])
       .then((empChoice) => {
         const employee = empChoice.employee_update;
-        const params = [];
-        params.push(employee);
 
         db.findAllEmployees().then(([rows]) => {
           const managers = rows;
@@ -382,8 +380,11 @@ function updateManager() {
                 choices: managersList,
               },
             ])
-            .then((res) => db.updateManager(managers, res.manager))
-            .then(() => {
+            .then((managerChoice) => {
+              const manager = managerChoice.manager;
+              db.updateManager(employee, manager);
+              console.log("Employee has been updated!");
+
               viewAllEmployees();
             });
         });
