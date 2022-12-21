@@ -21,7 +21,7 @@
   ## [Useage](#table-of-contents)
   Initiate the database through MySQL and execute seeds.sql then, on the command line run npm start and follow the prompts. 
   ## [Walkthrough](#table-of-contents)
-  Walkthrough Link:
+  Walkthrough Link: https://watch.screencastify.com/v/zgJr36JT1E79CWKs2x9H
   
   ## [License](#table-of-contents)
   This application has the following license:
