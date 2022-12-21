@@ -1,6 +1,6 @@
 INSERT INTO department (name)
 VALUES 
-("Counsil"),
+("Council"),
 ("General"),
 ("Commander"),
 ("Captain");

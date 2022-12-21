@@ -47,8 +47,8 @@ class DB {
 
   findEmployeeByDept() {
     return this.connection.promise().query(
-      `SELECT employee.id, employee.first_name, employee.last_name, department.name 
-      AS department, FROM employee department ON role_id = role.department_id `
+      `SELECT employee.first_name, employee.last_name, department.name AS department FROM employee
+      LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id`
     );
   }
 
